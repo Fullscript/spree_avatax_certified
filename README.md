@@ -63,6 +63,8 @@ rake spree_avatax_certified:load_seeds
 Testing
 -------
 
+Create a .env file to contain Avatax credentials, see .env_example
+
 Be sure to bundle your dependencies and then create a dummy test app for the specs to run against.
 
     $ bundle

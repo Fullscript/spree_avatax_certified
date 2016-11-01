@@ -4,7 +4,7 @@ Spree::LineItem.class_eval do
     {
       'Index' => id,
       'Name' => name,
-      'ItemID' => sku,
+      'ItemID' => variant.sku,
       'Price' => price.to_s,
       'Qty' => quantity,
       'TaxCategory' => tax_category

@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe SpreeAvataxCertified::Address, :type => :model do
+  MyConfigPreferences.set_preferences
   let(:country){ FactoryGirl.create(:country) }
   let(:address){ FactoryGirl.create(:address) }
   let(:order) { FactoryGirl.create(:order_with_line_items) }

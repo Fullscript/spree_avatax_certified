@@ -1,3 +1,11 @@
+# 2.3.4.fullscript
+- forked and changed gemspec spree requirement from 2.3 to 2.2
+- Gemfile: replaced pry dep with byebug, use hw 2.2 fork
+- updated .gitignore (byebug and rbenv)
+- LineItem decorator - changes to work in Spree 2.2 
+- specs: 2.2 compat & config fixture tweaks
+- spec_helper.rb - add monkey patch for rails 4.1 + state_machine gem
+
 # 2.3.4
 - [Refactored code and added final commit of tax in payment](https://github.com/railsdog/spree_avatax_certified/pull/55). (acreilly)
 - Added model SpreeAvataxCertified::Address to handle formatting addresses for tax calculation

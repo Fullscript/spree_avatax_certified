@@ -22,7 +22,6 @@ describe Spree::Payment, :type => :model do
       year: Time.now.year + 1,
       verification_value: "123",
       name: "Name",
-      imported: false
     )
   end
 

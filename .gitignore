@@ -4,6 +4,8 @@
 .config
 .env
 .rspec
+.byebug_history
+.ruby-version
 coverage
 InstalledFiles
 lib/bundler/man
