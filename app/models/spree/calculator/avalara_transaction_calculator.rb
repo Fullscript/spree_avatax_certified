@@ -13,12 +13,16 @@ module Spree
       item_address = order.ship_address || order.billing_address
       prev_tax_amount = prev_tax_amount(item)
 
-      return prev_tax_amount if %w(address cart).include?(order.state)
+      return prev_tax_amount if short_circuit_on_order_state(order)
       return prev_tax_amount if item_address.nil?
       return prev_tax_amount unless calculable.zone.include?(item_address)
 
       avalara_response = get_avalara_response(order)
       tax_for_item(item, avalara_response)
+    end
+
+    def short_circuit_on_order_state(order)
+      true if %w(address cart).include?(order.state)
     end
 
     alias_method :compute_shipment, :compute_shipment_or_line_item
