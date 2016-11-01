@@ -29,7 +29,7 @@ module SpreeAvataxCertified
       {
         LineNo: "#{line_item.id}-LI",
         Description: line_item.name[0..255],
-        TaxCode: line_item.tax_category.try(:description) || 'P0000000',
+        TaxCode: item_tax_code(line_item),
         ItemCode: line_item.variant.sku,
         Qty: line_item.quantity,
         Amount: line_item.discounted_amount.to_f,
@@ -39,6 +39,10 @@ module SpreeAvataxCertified
         Discounted: true,
         TaxIncluded: tax_included_in_price?(line_item)
       }
+    end
+
+    def item_tax_code(line_item)
+      line_item.tax_category.try(:description) || 'P0000000'
     end
 
     def item_lines_array
