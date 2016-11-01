@@ -23,20 +23,14 @@ module SpreeAvataxCertified
     end
 
     def origin_address
-      mdata = order.store.merchant_data
-
-      raise "merchant_data cannot be nil" if mdata.nil?
-
-      self.origin = build_address(Spree::Address.new(address1:mdata.street_address, city: mdata.city, state:Spree::State.find_by(abbr:mdata.region), zipcode:mdata.postal_code ), "1")
-
       origin = JSON.parse(Spree::Config.avatax_origin)
 
       orig_address = {
         :AddressCode => 'Orig',
-        :Line1 => mdata.street_address, origin['Address1'],
-        :Line2 => mdata.street_address2, origin['Address2'],
-        :City => mdata.city, origin['City'],
-        :Region => mdata.find_by(abbr:mdata.region),
+        :Line1 => origin['Address1'],
+        :Line2 => origin['Address2'],
+        :City => origin['City'],
+        :Region => origin['Region'],
         :PostalCode => origin['Zip5'],
         :Country => origin['Country']
       }
