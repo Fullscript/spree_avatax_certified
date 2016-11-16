@@ -51,7 +51,7 @@ module Spree
 
     def cache_key(order)
       key = order.avatax_cache_key
-      key << (order.ship_address.try(:cache_key) || order.bill_address.try(:cache_key)).to_s
+      key << (order.ship_address.try(:avatax_cache_key) || order.bill_address.try(:avatax_cache_key)).to_s
       order.line_items.each do |line_item|
         key << line_item.avatax_cache_key
       end
