@@ -48,8 +48,8 @@ module SpreeAvataxCertified
           :Line1 => order.ship_address.address1,
           :Line2 => order.ship_address.address2,
           :City => order.ship_address.city,
-          :Region => order.ship_address.state_name,
-          :Country => Spree::Country.find(order.ship_address.country_id).iso,
+          :Region => order.ship_address.state.abbr,
+          :Country => order.ship_address.country.iso,
           :PostalCode => order.ship_address.zipcode
         }
 
