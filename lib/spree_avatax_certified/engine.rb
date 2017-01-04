@@ -1,4 +1,8 @@
 module SpreeAvataxCertified
+  class << self
+    attr_accessor :cache
+  end
+
   class Engine < Rails::Engine
     require 'spree/core'
     isolate_namespace Spree
@@ -29,10 +33,33 @@ module SpreeAvataxCertified
       end
     end
 
+    def self.configure_caching
+      SpreeAvataxCertified.cache = if ENV['MEMCACHED_SERVERS'].blank?
+                                     Rails.cache
+                                   else
+                                     configure_memcached
+                                   end
+    end
+
+    def configure_memcached
+      store_config = [
+        :dalli_store,
+        nil,
+        {
+          namespace: 'spree_avatax_certified',
+          expires_in: 5.minutes,
+          compress: true,
+          compression_min_size: 10240
+        }
+      ]
+      cache_store = ActiveSupport::Cache.lookup_store(*store_config)
+    end
+
     def self.activate
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/*_decorator*.rb')) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
+      configure_caching
     end
 
     config.to_prepare &method(:activate).to_proc
