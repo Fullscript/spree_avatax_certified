@@ -43,7 +43,7 @@ module Spree
     end
 
     def get_avalara_response(order)
-      Rails.cache.fetch(cache_key(order), time_to_idle: 5.minutes) do
+      SpreeAvataxCertified.cache.fetch(cache_key(order), time_to_idle: 5.minutes) do
         order.avalara_capture
       end
     end
