@@ -22,7 +22,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'json', '~> 1.7'
   s.add_dependency 'addressable', '~> 2.3'
   s.add_dependency 'rest-client', '~> 1.7'
-  s.add_dependency 'psych', '~> 2.0.4'
+  s.add_dependency 'psych', '~> 2.1.0'
+ 
   s.add_dependency 'logging', '~> 1.8'
 
   #add gems here for files
