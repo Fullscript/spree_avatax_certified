@@ -34,7 +34,7 @@ module SpreeAvataxCertified
     end
 
     def self.configure_caching
-      SpreeAvataxCertified.cache = if ENV['MEMCACHED_SERVERS'].blank?
+      SpreeAvataxCertified.cache = if ENV['MEMCACHE_SERVERS'].blank?
                                      Rails.cache
                                    else
                                      configure_memcached
