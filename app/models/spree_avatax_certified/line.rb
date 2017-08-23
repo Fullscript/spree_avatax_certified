@@ -117,7 +117,7 @@ module SpreeAvataxCertified
       line = {
         :LineNo => "#{line_item.id}-LI",
         :Description => line_item.name[0..255],
-        :TaxCode => line_item.tax_category.try(:description) || 'P0000000',
+        :TaxCode => item_tax_code(line_item),
         :ItemCode => line_item.variant.sku,
         :Qty => quantity,
         :Amount => -amount.to_f,
