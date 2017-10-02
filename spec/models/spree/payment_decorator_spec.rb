@@ -5,6 +5,7 @@ describe Spree::Payment, :type => :model do
     order = FactoryGirl.create(:completed_order_with_totals)
     order.line_items.first.tax_category.update_attributes(name: "Clothing", description: "PC030000")
     Spree::AvalaraTransaction.create(order: order)
+    allow(order).to receive(:tax_application).and_return nil
     order.avalara_capture_finalize
     order
   end

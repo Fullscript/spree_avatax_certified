@@ -29,7 +29,17 @@ module Spree
 
     def commit_avatax_final(invoice_dt = nil, return_auth = nil)
       if document_committing_enabled?
-        if tax_calculation_enabled?
+        # Only commit
+        #   (if gem spree preference is set to true)
+        #   AND
+        #   (
+        #     if the order was never handled by the FullscriptTransactionCalculator)
+        #     OR
+        #     the order tax was successfuly calculated by avata
+        #   )
+        #
+        #  This applies to both orders and returns.
+        if tax_calculation_enabled? && (order.tax_application.blank? || order.tax_application == 'avatax')
           if %w(ReturnInvoice ReturnOrder).include?(invoice_dt)
             post_return_to_avalara(true, invoice_dt, return_auth)
           else
