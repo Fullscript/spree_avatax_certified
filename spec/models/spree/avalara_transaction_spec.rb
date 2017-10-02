@@ -49,6 +49,7 @@ describe Spree::AvalaraTransaction, :type => :model do
         end
       end
 
+
       context 'included_in_price' do
         before do
           rate.update_attributes(included_in_price: true)
@@ -73,27 +74,89 @@ describe Spree::AvalaraTransaction, :type => :model do
     end
 
     describe "#commit_avatax_final" do
-      it "should commit avatax final" do
-        expect(order.avalara_transaction.commit_avatax_final('SalesInvoice')["TotalTax"]).to eq("2")
-      end
-
-      it 'should receive post_order_to_avalara' do
-        expect(order.avalara_transaction).to receive(:post_order_to_avalara)
-        order.avalara_transaction.commit_avatax_final('SalesInvoice')
-      end
-
-      it "should fail to commit to avatax if settings are false" do
-        Spree::Config.avatax_document_commit = false
-
-        expect(order.avalara_transaction.commit_avatax_final('SalesInvoice')).to eq("avalara document committing disabled")
-      end
-
-      context 'tax calculation disabled' do
-        it 'should respond with total tax of 0' do
-          Spree::Config.avatax_tax_calculation = false
-          expect(order.avalara_transaction.commit_avatax('SalesInvoice')[:TotalTax]).to eq("0.00")
+      context 'old tests' do
+        before do
+          allow(order).to receive(:tax_application).and_return nil
         end
+
+        it "should commit avatax final" do
+          expect(order.avalara_transaction.commit_avatax_final('SalesInvoice')["TotalTax"]).to eq("2")
+        end
+
+        it 'should receive post_order_to_avalara' do
+          expect(order.avalara_transaction).to receive(:post_order_to_avalara)
+          order.avalara_transaction.commit_avatax_final('SalesInvoice')
+        end
+
+        it "should fail to commit to avatax if settings are false" do
+          Spree::Config.avatax_document_commit = false
+
+          expect(order.avalara_transaction.commit_avatax_final('SalesInvoice')).to eq("avalara document committing disabled")
+        end
+
+        context 'tax calculation disabled' do
+          it 'should respond with total tax of 0' do
+            Spree::Config.avatax_tax_calculation = false
+            expect(order.avalara_transaction.commit_avatax_final('SalesInvoice')[:TotalTax]).to eq("0.00")
+          end
+        end
+
       end
+
+      context 'FS global tax collection is off' do
+
+        shared_examples 'commits based on Fullscript order tax app' do
+          it "should commit avatax" do
+            expect(order.avalara_transaction.commit_avatax_final('SalesInvoice')["TotalTax"]).to eq("2")
+          end
+
+          it 'should receive post_order_to_avalara' do
+            expect(order.avalara_transaction).to receive(:post_order_to_avalara)
+            order.avalara_transaction.commit_avatax_final('SalesInvoice')
+          end
+        end
+
+        shared_examples 'no commit based on Fullscript order tax application' do
+          it "should not commit avatax" do
+            expect(order.avalara_transaction.commit_avatax_final('SalesInvoice')[:TotalTax]).to eq("0.00")
+          end
+
+          it 'should not receive post_order_to_avalara' do
+            expect(order.avalara_transaction).to_not receive(:post_order_to_avalara)
+            order.avalara_transaction.commit_avatax_final('SalesInvoice')
+          end
+        end
+
+        context 'taxes off globally' do
+          before do
+            allow(order).to receive(:tax_application).and_return 'none'
+          end
+          it_behaves_like 'no commit based on Fullscript order tax application'
+        end
+
+        context 'taxes off for store' do
+          before do
+            allow(order).to receive(:tax_application).and_return 'store'
+          end
+          it_behaves_like 'no commit based on Fullscript order tax application'
+        end
+
+        context 'avalara tax calc success' do
+          before do
+            allow(order).to receive(:tax_application).and_return 'avatax'
+          end
+          it_behaves_like 'commits based on Fullscript order tax app'
+        end
+
+        context 'tax_application not set' do
+          before do
+            allow(order).to receive(:tax_application).and_return nil
+          end
+          it_behaves_like 'commits based on Fullscript order tax app'
+        end
+
+      end
+
     end
 
     describe '#cancel_order' do

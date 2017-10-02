@@ -13,6 +13,8 @@ describe Spree::Order, type: :model do
     stock_location = FactoryGirl.create(:stock_location)
     order.line_items.first.tax_category.update_attributes(name: "Clothing", description: "PC030000")
     completed_order.line_items.first.tax_category.update_attributes(name: "Clothing", description: "PC030000")
+
+    allow_any_instance_of(Spree::Order).to receive(:tax_application).and_return nil
   end
 
   describe "#avalara_eligible?" do
