@@ -35,7 +35,7 @@ module Spree
         #   (
         #     if the order was never handled by the FullscriptTransactionCalculator)
         #     OR
-        #     the order tax was successfuly calculated by avata
+        #     the order tax was successfuly calculated by avatax
         #   )
         #
         #  This applies to both orders and returns.
@@ -117,6 +117,7 @@ module Spree
       return { TotalTax: '0.00' } if tax_result == 'error in Tax'
       return tax_result if tax_result['ResultCode'] == 'Success'
     end
+
     def post_return_to_avalara(commit = false, invoice_detail = nil, return_auth = nil)
       AVALARA_TRANSACTION_LOGGER.info('starting post return order to avalara')
 
