@@ -3,4 +3,4 @@ en:
     avalara:
       settings: Avalara Settings
       settings_tax_use_codes: Avalara Settings Tax Use Codes
-      
+      avalara_entity_use_code_settings: Avalara Entity Use Codes Settings
